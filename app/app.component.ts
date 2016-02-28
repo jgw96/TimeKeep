@@ -13,7 +13,7 @@ import {Component} from 'angular2/core';
         
         #running {
             text-align: center;
-            margin-top: 3rem;
+            margin-top: 5rem;
             font-size: 2.5em;
         }
         
@@ -26,6 +26,10 @@ import {Component} from 'angular2/core';
         #lastTime {
             text-align: center;
         }
+        
+        #timeTotal {
+            text-align: center;
+        }
       `
     ]
 })
@@ -36,12 +40,24 @@ export class AppComponent {
     public timer: number;
     public running: string;
     public lastTime: string;
+    times: Object[];
     
     constructor() {
         this.start = 0;
         this.time = "0";
         this.running = "Timer Stopped";
         this.lastTime = localStorage.getItem("lastTime");
+        
+        if (JSON.parse(localStorage.getItem("times")).length > 10) {
+            localStorage.removeItem("times");
+        } 
+
+        if (localStorage.getItem("times") !== null) {
+            this.times = JSON.parse(localStorage.getItem("times"));
+        } 
+        else {
+            this.times = [];
+        }
     }
     
     startTimer() {
@@ -60,16 +76,18 @@ export class AppComponent {
     
     stopTimer() {
         clearInterval(this.timer);
-        Notification.requestPermission();
         new Notification("Time Worked", {
             body: `You worked for ${this.time} minutes!`,
             icon: "calculator-128.png"
         });
         this.lastTime = `You worked for ${this.time} minutes on your last stretch!`;
         localStorage.setItem("lastTime", this.lastTime);
+        this.times.push(this.time);
         this.running = "Timer Stopped";
         this.time = "0";
         this.start = 0;
+        
+        localStorage.setItem("times", JSON.stringify(this.times));
     }
     
  }

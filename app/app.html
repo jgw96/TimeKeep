@@ -1,9 +1,23 @@
-<div id="main">
-    <p id="running" [textContent]="running"></p>
-    <p id="time" [textContent]="time"></p>
+<div class="pane-group">
+    <div class="pane-sm sidebar">
+        <h4 id="timeTotal">TimeSheet</h4>
+        <ul>
+            <li *ngFor="#time of times">
+                {{time}} minutes
+            </li>
+        </ul>
+    </div>
+    <div class="pane">
+        <div id="main">
+            <p id="running" [textContent]="running"></p>
+            <p id="time" [textContent]="time"></p>
 
-    <p id="lastTime" [textContent]="lastTime"></p>
+            <p id="lastTime" [textContent]="lastTime"></p>
+        </div>
+    </div>
 </div>
+
+
 <footer class="toolbar toolbar-footer">
     <div class="toolbar-actions">
         <button (click)="stopTimer()" class="btn btn-default">

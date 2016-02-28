@@ -24,6 +24,15 @@ System.register(['angular2/core'], function(exports_1, context_1) {
                     this.time = "0";
                     this.running = "Timer Stopped";
                     this.lastTime = localStorage.getItem("lastTime");
+                    if (JSON.parse(localStorage.getItem("times")).length > 10) {
+                        localStorage.removeItem("times");
+                    }
+                    if (localStorage.getItem("times") !== null) {
+                        this.times = JSON.parse(localStorage.getItem("times"));
+                    }
+                    else {
+                        this.times = [];
+                    }
                 }
                 AppComponent.prototype.startTimer = function () {
                     var _this = this;
@@ -39,23 +48,24 @@ System.register(['angular2/core'], function(exports_1, context_1) {
                 };
                 AppComponent.prototype.stopTimer = function () {
                     clearInterval(this.timer);
-                    Notification.requestPermission();
                     new Notification("Time Worked", {
                         body: "You worked for " + this.time + " minutes!",
                         icon: "calculator-128.png"
                     });
                     this.lastTime = "You worked for " + this.time + " minutes on your last stretch!";
                     localStorage.setItem("lastTime", this.lastTime);
+                    this.times.push(this.time);
                     this.running = "Timer Stopped";
                     this.time = "0";
                     this.start = 0;
+                    localStorage.setItem("times", JSON.stringify(this.times));
                 };
                 AppComponent = __decorate([
                     core_1.Component({
                         selector: 'my-app',
                         templateUrl: 'app/app.html',
                         styles: [
-                            "\n        footer {\n            position:absolute;\n            width: 100%;\n            bottom: 0px;\n        }\n        \n        #running {\n            text-align: center;\n            margin-top: 3rem;\n            font-size: 2.5em;\n        }\n        \n        #time {\n            text-align: center;\n            font-size: 3em;\n            color: red;\n        }\n        \n        #lastTime {\n            text-align: center;\n        }\n      "
+                            "\n        footer {\n            position:absolute;\n            width: 100%;\n            bottom: 0px;\n        }\n        \n        #running {\n            text-align: center;\n            margin-top: 5rem;\n            font-size: 2.5em;\n        }\n        \n        #time {\n            text-align: center;\n            font-size: 3em;\n            color: red;\n        }\n        \n        #lastTime {\n            text-align: center;\n        }\n        \n        #timeTotal {\n            text-align: center;\n        }\n      "
                         ]
                     }), 
                     __metadata('design:paramtypes', [])
